@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
+import StudyMaterialSection from "./components/StudyMaterialSection";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -15,10 +17,12 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+<Navbar/>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/study-material" element={<StudyMaterialSection />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

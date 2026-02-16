@@ -4,7 +4,7 @@ import BatchCards from "@/components/BatchCards";
 import FacultySection from "@/components/FacultySection";
 import ToppersSection from "@/components/ToppersSection";
 import GallerySection from "@/components/GallerySection";
-import StudyMaterialSection from "@/components/StudyMaterialSection";
+// import StudyMaterialSection from "@/components/StudyMaterialSection";
 import ContactSection from "@/components/ContactSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
@@ -17,7 +17,7 @@ const Index = () => (
     <FacultySection />
     <ToppersSection />
     <GallerySection />
-    <StudyMaterialSection />
+    {/* <StudyMaterialSection /> */}
     <ContactSection />
     <Footer />
     <WhatsAppButton />
