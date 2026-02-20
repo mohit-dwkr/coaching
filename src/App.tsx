@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Admin from "./pages/Admin";
+import AdminLogin from "@/pages/AdminLogin";
 import NotFound from "./pages/NotFound";
 import StudyMaterialSection from "./components/StudyMaterialSection";
 import Navbar from "./components/Navbar";
@@ -22,6 +23,7 @@ function LayoutContent() {
       {!isAdminPage && <Navbar />}
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/study-material" element={<StudyMaterialSection />} />
         <Route path="*" element={<NotFound />} />
