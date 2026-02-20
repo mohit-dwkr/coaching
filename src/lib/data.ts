@@ -49,6 +49,7 @@ const KEYS = {
   gallery: "academic_gallery",
   materials: "academic_materials",
   inquiries: "academic_inquiries",
+  faculty: "academic_faculty",
 } as const;
 
 const defaultBatches: Batch[] = [
@@ -105,3 +106,5 @@ export const getMaterials = () => get<StudyMaterial[]>(KEYS.materials, defaultMa
 export const setMaterials = (d: StudyMaterial[]) => set(KEYS.materials, d);
 export const getInquiries = () => get<Inquiry[]>(KEYS.inquiries, []);
 export const setInquiries = (d: Inquiry[]) => set(KEYS.inquiries, d);
+export const getFaculty = () => get<Faculty[]>(KEYS.faculty, defaultFaculty);
+export const setFaculty = (d: Faculty[]) => set(KEYS.faculty, d);
