@@ -3,7 +3,7 @@
 🚀 Live Demo
 
 Live Website:
-https://your-netlify-link.netlify.app
+[https://your-netlify-link.netlify.ap](https://coaching-class.netlify.app/)p
 
 Admin Panel:
 https://your-netlify-link.netlify.app/admin
