@@ -1,4 +1,5 @@
 📘 Coaching Management Website
+
 🚀 Live Demo
 
 Live Website:
@@ -8,11 +9,8 @@ Admin Panel:
 https://your-netlify-link.netlify.app/admin
 
 📌 Project Overview
-
 This is a fully dynamic Coaching Institute Website with an authenticated Admin Panel.
-
 The website allows the admin to manage all website content without touching the code.
-
 All sections of the website are dynamically controlled through the Admin Panel and connected with Supabase.
 
 🌐 User Side Features
