@@ -3,10 +3,10 @@
 🚀 Live Demo
 
 Live Website:
-[https://your-netlify-link.netlify.ap](https://coaching-class.netlify.app/)p
+[https://your-netlify-link.netlify.app](https://coaching-class.netlify.app/)
 
 Admin Panel:
-https://your-netlify-link.netlify.app/admin
+[https://your-netlify-link.netlify.app/admin](https://coaching-class.netlify.app/admin)
 
 📌 Project Overview
 This is a fully dynamic Coaching Institute Website with an authenticated Admin Panel.
