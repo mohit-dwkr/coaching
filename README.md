@@ -1,73 +1,95 @@
-# Welcome to your Lovable project
+📘 Coaching Management Website
 
-## Project info
+🚀 Live Demo
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Live Website:
+[https://your-netlify-link.netlify.app](https://coaching-class.netlify.app/)
 
-## How can I edit this code?
+Admin Panel:
+[https://your-netlify-link.netlify.app/admin](https://coaching-class.netlify.app/admin)
 
-There are several ways of editing your application.
+📌 Project Overview
+This is a fully dynamic Coaching Institute Website with an authenticated Admin Panel.
+The website allows the admin to manage all website content without touching the code.
+All sections of the website are dynamically controlled through the Admin Panel and connected with Supabase.
 
-**Use Lovable**
+🌐 User Side Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Responsive Landing Page
 
-Changes made via Lovable will be committed automatically to this repo.
+Hero Section (Dynamic)
 
-**Use your preferred IDE**
+Batch Section (Dynamic)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Faculty Section (Dynamic)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Toppers Section (Dynamic)
 
-Follow these steps:
+Gallery Section (Dynamic)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+Study Material Page (Upload & Download Notes)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Inquiry Form
 
-# Step 3: Install the necessary dependencies.
-npm i
+All changes made in the Admin Panel are instantly reflected on the live website.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+🔐 Admin Panel Features
 
-**Edit a file directly in GitHub**
+Secure Login Authentication
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Add / Edit / Delete Website Content
 
-**Use GitHub Codespaces**
+Admin can manage:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Hero Section
 
-## What technologies are used for this project?
+Batch Section
 
-This project is built with:
+Faculty Section
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Toppers Section
 
-## How can I deploy this project?
+Gallery Images
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Study Materials (PDF / Notes Upload)
 
-## Can I connect a custom domain to my Lovable project?
+Student Inquiries
 
-Yes, you can!
+🛠️ Tech Stack
+🎨 Frontend
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+React
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+TypeScript
+
+Tailwind CSS
+
+Lovable (AI-generated initial UI)
+
+🔥 Backend & Database
+
+Supabase Database
+
+Supabase Authentication
+
+Supabase Storage
+
+🚀 Deployment
+
+Netlify (Continuous Deployment)
+
+⚡ Key Highlights
+
+Fully Dynamic Website
+
+Protected Admin Routes
+
+File Upload System
+
+Real-time Data Rendering
+
+Production Deployment Ready
+
+👨‍💻 Author
+
+Developed by Mohit
