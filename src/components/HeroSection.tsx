@@ -63,8 +63,22 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="pt-16 overflow-hidden min-h-[90vh]">
-      <div className="container mx-auto px-4 py-16 lg:py-24">
+    <section id="home" className="relative w-full min-h-[85vh] flex items-center overflow-hidden">
+      {/* Background Image Layer */}
+      {heroData?.image_url && (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroData.image_url}
+            alt="Classroom Background"
+            className="w-full h-full object-cover"
+          />
+          {/* Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        </div>
+      )}
+
+      {/* Main Content */}
+      <div className="container mx-auto px-4 relative z-10 py-24">
         <AnimatePresence mode="wait">
           {!loading ? (
             <motion.div
@@ -72,46 +86,30 @@ export default function HeroSection() {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
+              className="max-w-3xl"
             >
-              {/* Main Content Grid */}
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                {/* Text Side */}
-                <motion.div variants={itemVariants}>
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-foreground">
-                    {renderHeading()}
-                  </h1>
+              {/* Text Side - Now White for Overlay */}
+              <motion.div variants={itemVariants}>
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight text-white drop-shadow-md">
+                  {renderHeading()}
+                </h1>
 
-                  <p className="mt-5 text-lg text-muted-foreground max-w-md leading-relaxed">
-                    {heroData?.subheading ||
-                      "Empowering K-12 students with expert coaching, proven results, and a clear path to academic greatness — for over 15 years."}
-                  </p>
+                <p className="mt-5 text-lg text-gray-100 max-w-xl leading-relaxed drop-shadow-sm">
+                  {heroData?.subheading ||
+                    "Empowering K-12 students with expert coaching, proven results, and a clear path to academic greatness — for over 15 years."}
+                </p>
 
-                  <div className="mt-8 flex flex-wrap gap-4">
-                    <Button size="lg" asChild>
-                      <a href="#contact">Join Now</a>
-                    </Button>
-                    <Button size="lg" variant="outline" asChild>
-                      <a href="#batches">Explore Batches</a>
-                    </Button>
-                  </div>
-                </motion.div>
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-white" asChild>
+                    <a href="#contact">Join Now</a>
+                  </Button>
+                  <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-md text-white border-white/20 hover:bg-white hover:text-black" asChild>
+                    <a href="#batches">Explore Batches</a>
+                  </Button>
+                </div>
+              </motion.div>
 
-                {/* Image Side */}
-                <motion.div variants={itemVariants} className="flex justify-center">
-                  {heroData?.image_url && (
-                    <div className="relative">
-                      <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl" />
-                      <img
-                        src={heroData.image_url}
-                        alt="Director – Academic Coaching Centre"
-                        className="relative z-10 w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 object-cover rounded-2xl shadow-xl"
-                      />
-                    </div>
-                  )}
-                </motion.div>
-              </div>
-
-              {/* Stats - Ab ye main container ke andar hai, alag se load nahi hoga */}
+              {/* Stats - Floating Bento Style */}
               <motion.div
                 variants={itemVariants}
                 className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-5"
@@ -119,21 +117,20 @@ export default function HeroSection() {
                 {stats.map((s) => (
                   <div
                     key={s.label}
-                    className="flex items-center gap-4 bg-secondary rounded-xl p-5 border border-primary/10"
+                    className="flex items-center gap-4 bg-white/80 backdrop-blur-md rounded-2xl p-5 border border-white/10 shadow-xl"
                   >
-                    <div className="flex-shrink-0 p-3 rounded-lg bg-primary text-primary-foreground">
+                    <div className="flex-shrink-0 p-3 rounded-lg bg-primary text-white">
                       <s.icon className="h-6 w-6" />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-foreground">{s.value}</div>
-                      <div className="text-sm text-muted-foreground">{s.label}</div>
+                      <div className="text-2xl font-bold text-slate-900">{s.value}</div>
+                      <div className="text-sm text-slate-600 font-medium">{s.label}</div>
                     </div>
                   </div>
                 ))}
               </motion.div>
             </motion.div>
           ) : (
-            /* Aap yahan ek simple spinner ya blank div rakh sakte hain */
             <div key="loader" className="h-[60vh]" />
           )}
         </AnimatePresence>
