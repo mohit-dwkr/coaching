@@ -83,7 +83,7 @@ const About = () => {
               <div className="relative group">
                 <div className="absolute inset-0 bg-primary/20 rounded-2xl translate-x-2 translate-y-2 group-hover:translate-x-1 group-hover:translate-y-1 transition-transform" />
                 <img
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80"
+                  src= "/Director.png"
                   alt="Director"
                   className="w-full aspect-[4/5] object-cover rounded-2xl relative z-10 hover:scale  transition-all duration-500 shadow-xl"
                 />
@@ -94,7 +94,7 @@ const About = () => {
               {/* Director Name & Title - Mobile par center, Laptop par border-left ke saath */}
               <div className="inline-block md:block border-l-0 md:border-l-4 border-primary pl-0 md:pl-6 mb-10">
                 <h4 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight">
-                  Mr. Rahul Sharma
+                  Mr. Mohit Dwkr
                 </h4>
                 <p className="text-primary font-bold tracking-[0.2em] uppercase text-[10px] md:text-xs mt-2">
                   Founder & Managing Director
@@ -111,7 +111,7 @@ const About = () => {
               <div className="relative">
                 <Quote className="absolute -top-4 -left-4 w-8 h-8 text-primary/20 md:hidden" />
                 <p className="text-base md:text-xl text-slate-300 mb-2 italic leading-relaxed max-w-2xl mx-auto md:mx-0">
-                  "At Academic, we don't just prepare you for exams; we prepare you for life.
+                  "At Toppers Academy, we don't just prepare you for exams; we prepare you for life.
                   We focus on building a foundation so strong that no competition feels too difficult."
                 </p>
               </div>

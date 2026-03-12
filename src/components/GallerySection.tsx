@@ -54,13 +54,13 @@ export default function GallerySection() {
       className="text-center mb-16"
     >
       <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-black tracking-[0.2em] uppercase mb-4 border border-primary/20">
-        Our Memories
+        Inside Academy
       </div>
-      <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight mt-4">
-        Photo <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-indigo-600">Gallery</span>
+      <h2 className="text-3xl md:text-6xl font-black text-gray-900 tracking-tight mt-4">
+        Life at our  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-indigo-600">Institute</span>
       </h2>
       <p className="mt-6 text-gray-500 max-w-xl mx-auto text-base md:text-lg leading-relaxed font-medium">
-        Glimpses of our vibrant coaching environment, interactive sessions, and memorable celebrations.
+       Explore our state-of-the-art classrooms, collaborative study zones, and the success stories we build every single day.
       </p>
     </motion.div>
 
@@ -125,7 +125,7 @@ export default function GallerySection() {
     <div className="flex items-center gap-3">
       {showAll ? (
         <>
-          View Fewer Memories 
+          Show Less 
           <ChevronUp className="h-5 w-5 transition-transform group-hover:-translate-y-1" />
         </>
       ) : (

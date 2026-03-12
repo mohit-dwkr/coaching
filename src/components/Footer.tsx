@@ -15,7 +15,7 @@ export default function Footer() {
               <div className="bg-primary p-1.5 rounded-lg">
                 <GraduationCap className="h-6 w-6 text-white" />
               </div>
-              Academic
+              Toppers Academy
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs mx-auto sm:mx-0">
               Empowering students to achieve their academic goals through quality education and expert mentorship since 2010.

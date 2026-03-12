@@ -19,13 +19,13 @@ const testimonials: Testimonial[] = [
     name: "Sanya Gupta",
     rank: "NEET - 680/720",
     review: "Structured study material and weekly tests helped me identify my weak spots early on. I couldn't have cracked NEET without their consistent guidance.",
-    image: "S"
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&h=200"
   },
   {
     name: "Rohan Verma",
     rank: "Board Exam - 98%",
     review: "The doubt clearing sessions are the best. Teachers are always ready to help even after classes. The digital library was a great resource during my exams.",
-    image: "R"
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200"
   }
 ];
 
@@ -122,14 +122,14 @@ const Testimonials: React.FC = () => {
           </div>
 
           <button
-            className="flex items-center gap-4 bg-slate-950 text-white px-10 py-5 mt-2
+            className="flex items-center gap-4 bg-slate-950 text-white px-4 py-2 mt-2
              rounded-full font-bold hover:bg-primary transition-all group shadow-2xl shadow-slate-200 active:scale-95"
             onClick={() => window.open('https://google.com', '_blank')}
           >
             <div className="bg-white p-1 rounded-full">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_Secondary_Icon_Color.svg" className="w-5 h-5" alt="G" />
+              <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" className="w-5 h-5" alt="G" />
             </div>
-            <span className="text-base">See All Reviews On Google</span>
+            <span className="text-[12px]">See All Reviews On Google</span>
             <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
           </button>
         </div>

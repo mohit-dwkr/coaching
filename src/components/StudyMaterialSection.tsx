@@ -105,35 +105,65 @@ export default function StudyMaterialSection() {
         </div>
       )}
 
-      {/* PDF List */}
-      <div className="space-y-3">
-        <AnimatePresence mode="wait">
-          {filtered.map((m: any) => (
-            <motion.div 
-              key={m.id} 
-              initial={{ opacity: 0, y: 10 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              exit={{ opacity: 0, scale: 0.98 }}
-              className="bg-white border rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm"
-            >
-              <div className="flex items-center gap-3 w-full">
-                <div className="h-10 w-10 shrink-0 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
-                  <FileText size={20} />
-                </div>
-                <div className="min-w-0 flex-1 text-left">
-                  <p className="font-bold text-slate-800 truncate text-sm md:text-base">{m.title}</p>
-                  <p className="text-xs text-slate-400">{m.subject} | Class {m.student_class}</p>
-                </div>
-              </div>
-              <Button asChild className="w-full sm:w-auto rounded-xl font-bold">
-                <a href={m.file_url} target="_blank" rel="noreferrer">
-                  <Download className="h-4 w-4 mr-2" /> Download
-                </a>
-              </Button>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+    {/* PDF List */}
+<div className="space-y-4">
+  <AnimatePresence mode="wait">
+    {filtered.map((m: any) => (
+      <motion.div 
+        key={m.id} 
+        initial={{ opacity: 0, y: 15 }} 
+        animate={{ opacity: 1, y: 0 }} 
+        exit={{ opacity: 0, scale: 0.95 }}
+        whileHover={{ y: -2 }} // Chhota sa lift effect
+        className="group relative bg-white border border-slate-100 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm hover:shadow-md hover:border-blue-100 transition-all duration-300"
+      >
+        {/* Decorative background element on hover */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none" />
+
+        <div className="flex items-center gap-4 w-full relative z-10">
+          {/* Enhanced Icon Box */}
+          <div className="h-12 w-12 shrink-0 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-inner">
+            <FileText size={24} />
+          </div>
+
+          <div className="min-w-0 flex-1 text-left">
+            <div className="flex items-center gap-2 mb-0.5">
+              <p className="font-extrabold text-slate-800 truncate text-sm md:text-base tracking-tight">
+                {m.title}
+              </p>
+              <span className="hidden md:inline-flex px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-500 uppercase tracking-wide">
+                PDF
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-semibold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md">
+                {m.subject}
+              </span>
+              <span className="text-[14px] font-medium text-gray-500 flex items-center gap-1">
+                <span className="h-1 w-1 rounded-full bg-slate-300" />
+                Class {m.student_class}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="w-full sm:w-auto relative z-10">
+          <Button 
+            asChild 
+            className="w-full sm:w-auto rounded-xl font-bold bg-slate-900 hover:bg-blue-600 text-white shadow-lg shadow-slate-200 hover:shadow-blue-200 transition-all duration-300 h-11 px-6"
+          >
+            <a href={m.file_url} target="_blank" rel="noreferrer" className="flex items-center justify-center">
+              <Download className="h-4 w-4 mr-2 stroke-[3px]" /> 
+              Download Notes
+            </a>
+          </Button>
+        </div>
+      </motion.div>
+    ))}
+  </AnimatePresence>
+</div>
     </div>
   </div>
 </section>

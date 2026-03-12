@@ -58,7 +58,7 @@ export default function ToppersSection() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-100 text-yellow-700 text-[10px] font-black tracking-widest uppercase mb-4 shadow-sm border border-yellow-200">
             <Trophy className="w-3 h-3" /> Wall of Fame
           </div>
-          <h2 className="text-[28px] leading-tight md:text-6xl font-black text-gray-900 tracking-tight mt-4">
+          <h2 className="text-[32px] leading-tight md:text-6xl font-black text-gray-900 tracking-tight mt-4">
             Meet Our <span className="block sm:inline text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 via-orange-500 to-yellow-600 whitespace-nowrap">Legendary Toppers</span>
           </h2>
           <p className="mt-6 text-gray-500 max-w-xl mx-auto text-lg leading-relaxed font-medium">

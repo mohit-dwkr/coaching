@@ -188,7 +188,7 @@ const academicSession = `${currentYear}-${nextYear.toString().slice(-2)}`;
               {showAll ? (
                 <>Show Less <ChevronUp className="ml-2 h-5 w-5" /></>
               ) : (
-                <>Show More <ChevronDown className="ml-2 h-5 w-5" /></>
+                <>Show All Batches <ChevronDown className="ml-2 h-5 w-5" /></>
               )}
             </Button>
           </div>
