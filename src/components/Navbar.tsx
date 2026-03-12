@@ -5,42 +5,44 @@ import { Link, useLocation } from "react-router-dom";
 
 const links = [
   { label: "Home", href: "/" },
-  { label: "Batches", href: "#batches" },
-  { label: "Faculty", href: "#faculty" },
-  { label: "Results", href: "#results" },
-  { label: "Gallery", href: "#gallery" },
+  { label: "Batches", href: "/#batches" },
+  { label: "Faculty", href: "/#faculty" },
+  { label: "Results", href: "/#results" },
+  { label: "Gallery", href: "/#gallery" },
   { label: "Study Material", href: "/study-material" },
-  { label: "Contact", href: "#contact" },
+  { label: "About Us", href: "/about" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState("#home");
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
-  // 🔥 Route change handler
+  // Condition to check if we should show solid background
+  const isSolid = isScrolled || location.pathname !== "/";
+
+  useEffect(() => {
+    const handleScrollBg = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScrollBg);
+    return () => window.removeEventListener("scroll", handleScrollBg);
+  }, []);
+
   useEffect(() => {
     if (location.pathname === "/") {
       setActive("#home");
     } else {
-      setActive(""); // reset scroll active on other pages
+      setActive(""); 
     }
   }, [location.pathname]);
 
-  // 🔥 Scroll spy (ONLY on home page)
   useEffect(() => {
     if (location.pathname !== "/") return;
 
     const handleScroll = () => {
-      const sections = [
-        "home",
-        "batches",
-        "faculty",
-        "results",
-        "gallery",
-        "contact",
-      ];
-
+      const sections = ["home", "batches", "faculty", "results", "gallery", "contact"];
       for (let id of sections) {
         const el = document.getElementById(id);
         if (el) {
@@ -55,12 +57,17 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, [location.pathname]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+    <nav 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isSolid 
+          ? "bg-white/90 backdrop-blur-lg border-b border-border py-3 shadow-sm" 
+          : "bg-black/15 backdrop-blur-sm py-1"
+      }`}
+    >
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         
         {/* Logo */}
@@ -70,109 +77,86 @@ export default function Navbar() {
             window.scrollTo({ top: 0, behavior: "smooth" });
             setActive("#home");
           }}
-          className="flex items-center gap-2 font-bold text-xl text-primary"
+          className={`flex items-center gap-2 font-bold text-2xl transition-colors ${
+            isSolid ? "text-primary" : "text-white"
+          }`}
         >
-          <GraduationCap className="h-7 w-7" />
+          < GraduationCap className="h-8 w-8" />
           Academic
         </Link>
 
         {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center gap-1">
-          {links.map((l) =>
-            l.href.startsWith("/") ? (
+        <div className="hidden lg:flex items-center gap-2">
+          {links.map((l) => {
+            const isActive = l.href.startsWith("/#") 
+              ? active === l.href.replace("/", "")
+              : location.pathname === l.href;
+
+            return (
               <Link
                 key={l.href}
                 to={l.href}
                 onClick={() => {
-                  if (l.href === "/") {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
+                  if (l.href === "/") window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${
-                  l.href === "/study-material"
-                    ? location.pathname === l.href
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-primary"
-                    : active === "#home" && l.href === "/"
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-primary"
+                className={`px-4 py-2 text-sm font-bold transition-all rounded-full ${
+                  isActive
+                    ? isSolid 
+                      ? "text-primary bg-primary/10" 
+                      : "text-white bg-white/20 backdrop-blur-md"
+                    : isSolid 
+                      ? "text-muted-foreground hover:text-primary" 
+                      : "text-white/70 hover:text-white"
                 }`}
               >
                 {l.label}
               </Link>
-            ) : (
-              <a
-                key={l.href}
-                href={l.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${
-                  active === l.href
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-primary"
-                }`}
-              >
-                {l.label}
-              </a>
-            )
-          )}
+            );
+          })}
 
-          <Button size="sm" className="ml-3" asChild>
-            <a href="#contact">Join Now</a>
+          <Button size="lg" className={`ml-4 rounded-full px-8 shadow-lg transition-transform hover:scale-105 ${
+            !isSolid && "bg-white text-primary hover:bg-gray-100 border-none"
+          }`} asChild>
+            <a href="/#contact">Join Now</a>
           </Button>
         </div>
 
         {/* Mobile Toggle */}
         <button
-          className="lg:hidden text-foreground"
+          className={`lg:hidden p-2 rounded-md ${isSolid ? "text-foreground" : "text-white"}`}
           onClick={() => setOpen(!open)}
         >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {open ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
         </button>
       </div>
 
       {/* Mobile Menu */}
       {open && (
-        <div className="lg:hidden bg-background border-b border-border px-4 pb-4 animate-fade-in">
-          {links.map((l) =>
-            l.href.startsWith("/") ? (
+        <div className="lg:hidden bg-background border-b border-border px-4 pb-6 pt-2 animate-in slide-in-from-top duration-300">
+          {links.map((l) => {
+            const isActive = l.href.startsWith("/#") 
+              ? active === l.href.replace("/", "")
+              : location.pathname === l.href;
+
+            return (
               <Link
                 key={l.href}
                 to={l.href}
                 onClick={() => {
                   setOpen(false);
-                  if (l.href === "/") {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                  }
+                  if (l.href === "/") window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
-                className={`block py-2.5 text-sm font-medium transition-colors ${
-                  l.href === "/study-material"
-                    ? location.pathname === l.href
-                      ? "text-primary"
-                      : "text-muted-foreground hover:text-primary"
-                    : active === "#home" && l.href === "/"
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-primary"
+                className={`block py-3 text-base font-semibold border-b border-border/50 last:border-none ${
+                  isActive ? "text-primary" : "text-foreground"
                 }`}
               >
                 {l.label}
               </Link>
-            ) : (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className={`block py-2.5 text-sm font-medium transition-colors ${
-                  active === l.href
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-primary"
-                }`}
-              >
-                {l.label}
-              </a>
-            )
-          )}
+            );
+          })}
 
-          <Button size="sm" className="mt-2 w-full" asChild>
-            <a href="#contact" onClick={() => setOpen(false)}>
+          <Button size="lg" className="mt-6 w-full rounded-xl" asChild>
+            <a href="/#contact" onClick={() => setOpen(false)}>
               Join Now
             </a>
           </Button>

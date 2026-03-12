@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Layout, Image as ImageIcon, Upload, Save, Type, AlignLeft, Loader2, RefreshCcw, Trash2 } from "lucide-react";
+import { Layout, Image as ImageIcon, Upload, Save, Type, AlignLeft, Loader2, RefreshCcw, Trash2, Highlighter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +10,8 @@ import { supabase } from "@/supabaseClient";
 const DEFAULT_HERO = {
   heading: "Where Excellence Meets Ambition",
   subheading: "Empowering K-12 students with expert coaching, proven results, and a clear path to academic greatness — for over 15 years.",
-  image_url: "https://your-default-image-url.com/hero.png" 
+ image_url: "/hero.png",
+  highlight_word: "Excellence" // Default highlight word
 };
 
 export default function HeroManager() {
@@ -23,49 +24,51 @@ export default function HeroManager() {
     heading: "",
     subheading: "",
     image_url: "",
+    highlight_word: "", // New Field
   });
 
-  const handleHeadingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const words = value.trim().split(/\s+/).filter(Boolean);
+ const fetchHeroData = async () => {
+  setLoading(true);
+  const { data, error } = await supabase
+    .from("Coaching_Hero")
+    .select("*")
+    .limit(1)
+    .single();
 
-    if (words.length >= 4 && value.endsWith(" ")) {
-      return;
-    }
-
-    if (words.length > 4) {
-      const restrictedValue = words.slice(0, 4).join(" ");
-      setForm({ ...form, heading: restrictedValue });
-      toast.warning("Only 4 words allowed in heading!");
-    } else {
-      setForm({ ...form, heading: value });
-    }
-  };
-
-  const fetchHeroData = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("Coaching_Hero")
-      .select("*")
-      .limit(1)
-      .single();
-
-    if (!error && data) {
-      setHeroId(data.id);
-      setForm({
-        heading: data.heading || "",
-        subheading: data.subheading || "",
-        image_url: data.image_url || ""
-      });
-    } else {
-      setHeroId(null);
-    }
-    setLoading(false);
-  };
+  if (!error && data) {
+    setHeroId(data.id);
+    setForm({
+      heading: data.heading || DEFAULT_HERO.heading,
+      subheading: data.subheading || DEFAULT_HERO.subheading,
+      image_url: data.image_url || DEFAULT_HERO.image_url,
+      highlight_word: data.highlight_word || DEFAULT_HERO.highlight_word
+    });
+  } else {
+    // 🔥 Reset ke baad ya data na milne par empty strings ki jagah default values bharein
+    setHeroId(null);
+    setForm({
+      heading: DEFAULT_HERO.heading,
+      subheading: DEFAULT_HERO.subheading,
+      image_url: DEFAULT_HERO.image_url,
+      highlight_word: DEFAULT_HERO.highlight_word
+    });
+  }
+  setLoading(false);
+};
 
   useEffect(() => {
     fetchHeroData();
   }, []);
+
+  const handleHeadingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const words = value.trim().split(/\s+/).filter(Boolean);
+    if (words.length > 7) {
+      toast.warning("Only 7 words allowed!");
+      return;
+    }
+    setForm({ ...form, heading: value });
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -93,12 +96,11 @@ export default function HeroManager() {
 
   const handleSave = async () => {
     setLoading(true);
-    const finalHeading = form.heading.trim().split(/\s+/).slice(0, 4).join(" ");
-
     const payload = {
-      heading: finalHeading || DEFAULT_HERO.heading,
+      heading: form.heading.trim() || DEFAULT_HERO.heading,
       subheading: form.subheading.trim() || DEFAULT_HERO.subheading,
       image_url: form.image_url.trim() || DEFAULT_HERO.image_url,
+      highlight_word: form.highlight_word.trim(), // Save highlight word
       updated_at: new Date().toISOString()
     };
 
@@ -118,68 +120,101 @@ export default function HeroManager() {
     setLoading(false);
   };
 
-  const handleDeleteAll = async () => {
-    if (!confirm("Are you sure? This will reset the section to default values.")) return;
-    
-    setLoading(true);
-    if (heroId) {
-      await supabase.from("Coaching_Hero").delete().eq("id", heroId);
-    }
-    
-    setForm({ heading: "", subheading: "", image_url: "" });
-    setHeroId(null);
-    setLoading(false);
-    toast.success("Section reset to default state");
+ const handleDeleteAll = async () => {
+  if (!confirm("Are you sure? This will reset the section to default values.")) return;
+  
+  setLoading(true);
+  
+  // 1. Database se delete karein
+  if (heroId) {
+    const { error } = await supabase.from("Coaching_Hero").delete().eq("id", heroId);
+    if (error) toast.error("Database reset failed");
+  }
+  
+  // 2. 🔥 FRONTEND STATE FIX: 
+  // Hum values ko "" (empty) nahi karenge, balki seedha DEFAULT_HERO se bhar denge.
+  setForm({ 
+    heading: DEFAULT_HERO.heading, 
+    subheading: DEFAULT_HERO.subheading, 
+    image_url: DEFAULT_HERO.image_url, // Ab ye khali nahi hoga, default image lega
+    highlight_word: DEFAULT_HERO.highlight_word 
+  });
+  
+  setHeroId(null);
+  setLoading(false);
+  toast.success("Section reset to default state");
+};
+
+  // Helper for Preview Highlight
+  const renderPreviewHeading = () => {
+    const text = form.heading || DEFAULT_HERO.heading;
+    const highlight = form.highlight_word.toLowerCase();
+    if (!highlight) return text;
+
+    return text.split(/\s+/).map((word, i) => (
+      <span key={i} className={word.toLowerCase().replace(/[^\w]/g, '') === highlight ? "text-primary" : ""}>
+        {word}{" "}
+      </span>
+    ));
   };
 
   return (
     <div className="w-full max-w-6xl mx-auto p-4 md:p-6 space-y-6">
-      {/* Header Section */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Hero Section Manager</h1>
-          <p className="text-muted-foreground text-xs md:text-sm">Update content or reset to defaults.</p>
+          <p className="text-muted-foreground text-xs md:text-sm">Customize text, images, and highlights.</p>
         </div>
         <div className="flex items-center gap-2">
-            <Button variant="destructive" size="sm" onClick={handleDeleteAll} disabled={loading} className="flex-1 sm:flex-none">
-  <Trash2 className="w-4 h-4 sm:mr-2" /> 
-  {/* Option 1: Hamesha dikhane ke liye sirf <span>Reset</span> use karein */}
-  <span className="inline">Reset</span> 
-</Button>
-            <Button variant="outline" size="icon" onClick={fetchHeroData} disabled={loading} className="h-9 w-9">
-              <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-            </Button>
+          <Button variant="destructive" size="sm" onClick={handleDeleteAll} disabled={loading}>
+            <Trash2 className="w-4 h-4 mr-2" /> Reset
+          </Button>
+          <Button variant="outline" size="icon" onClick={fetchHeroData} disabled={loading}>
+            <RefreshCcw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-        {/* Form Column */}
         <div className="lg:col-span-7 space-y-6">
           <Card className="shadow-md border-primary/10">
             <CardHeader className="p-4 md:p-6 pb-2">
-              <div className="space-y-1">
-                <CardTitle className="text-lg md:text-xl flex items-center gap-2">
-                    <Layout className="w-5 h-5 text-primary" /> Content Manager
-                </CardTitle>
-                <CardDescription className="text-xs">Heading is limited to 4 words only.</CardDescription>
-              </div>
+              <CardTitle className="text-lg md:text-xl flex items-center gap-2">
+                <Layout className="w-5 h-5 text-primary" /> Content Manager
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-4 md:p-6 space-y-5">
+              
+              {/* Heading Input */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-semibold flex items-center gap-2">
-                    <Type className="w-4 h-4 text-primary" /> Heading
+                    <Type className="w-4 h-4 text-primary" /> Main Heading
                   </label>
                   <span className="text-[10px] bg-muted px-2 py-0.5 rounded font-mono">
-                    {form.heading.split(/\s+/).filter(Boolean).length}/4 Words
+                    {form.heading.split(/\s+/).filter(Boolean).length}/7 Words
                   </span>
                 </div>
                 <Input 
                   value={form.heading} 
                   onChange={handleHeadingChange} 
-                  placeholder={`Default: ${DEFAULT_HERO.heading}`}
-                  className={`text-sm ${form.heading.split(/\s+/).filter(Boolean).length === 4 ? "border-blue-500 ring-1 ring-blue-500/20" : ""}`}
+                  placeholder="Enter main heading..."
                 />
+              </div>
+
+              {/* Highlight Word Input - NEW FIELD */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold flex items-center gap-2">
+                  <Highlighter className="w-4 h-4 text-blue-500" /> Word to Highlight (Blue Color)
+                </label>
+                <Input 
+                  value={form.highlight_word} 
+                  onChange={(e) => setForm({...form, highlight_word: e.target.value})} 
+                  placeholder="Example: Excellence"
+                  className="border-blue-200 focus:ring-blue-500"
+                />
+                <p className="text-[10px] text-muted-foreground italic">Type the exact word from the heading you want to color blue.</p>
               </div>
               
               <div className="space-y-2">
@@ -189,68 +224,60 @@ export default function HeroManager() {
                 <Textarea 
                   value={form.subheading} 
                   onChange={(e) => setForm({...form, subheading: e.target.value})} 
-                  placeholder="Enter subheading..."
-                  className="min-h-[100px] text-sm"
+                  placeholder="Enter description..."
+                  className="min-h-[80px]"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-semibold flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-primary" /> Image Source
+                  <ImageIcon className="w-4 h-4 text-primary" /> Background Image
                 </label>
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Input 
                     value={form.image_url} 
                     onChange={(e) => setForm({...form, image_url: e.target.value})} 
-                    placeholder="URL or Upload"
-                    className="flex-1 text-sm"
+                    placeholder="Image URL"
+                    className="flex-1"
                   />
-                  <div className="flex gap-2">
-                    <Button type="button" variant="secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading} className="flex-1 sm:flex-none">
-                      {uploading ? <Loader2 className="animate-spin h-4 w-4" /> : <><Upload className="w-4 h-4 mr-2" /> Upload</>}
-                    </Button>
-                  </div>
+                  <Button type="button" variant="secondary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                    {uploading ? <Loader2 className="animate-spin h-4 w-4" /> : <Upload className="w-4 h-4 mr-2" />} Upload
+                  </Button>
                   <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileUpload} />
                 </div>
               </div>
 
-              <div className="pt-2">
-                <Button onClick={handleSave} disabled={loading} className="w-full h-11">
-                    {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-                    Save Changes
-                </Button>
-              </div>
+              <Button onClick={handleSave} disabled={loading} className="w-full h-11">
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />} Save All Changes
+              </Button>
             </CardContent>
           </Card>
         </div>
 
-        {/* Preview Column */}
-        <div className="lg:col-span-5 space-y-6">
+        {/* Live Preview */}
+        <div className="lg:col-span-5">
           <Card className="lg:sticky lg:top-6 border-dashed border-2 shadow-none bg-muted/20">
-            <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest">Live Preview</CardTitle>
+            <CardHeader className="p-4 pb-2 text-center text-[10px] font-bold uppercase text-muted-foreground tracking-widest">
+              Live Preview
             </CardHeader>
             <CardContent className="p-4">
               <div className="rounded-xl border overflow-hidden bg-background shadow-lg">
-                <div className="relative aspect-video bg-muted flex items-center justify-center">
+                <div className="relative aspect-video bg-muted">
                   <img 
                     src={form.image_url || DEFAULT_HERO.image_url} 
                     alt="Preview" 
                     className="w-full h-full object-cover" 
                   />
                 </div>
-                <div className="p-4 md:p-5 space-y-2 md:space-y-3">
-                  <h3 className="text-base md:text-lg font-bold leading-tight line-clamp-2">
-                    {form.heading || DEFAULT_HERO.heading}
+                <div className="p-4 space-y-2">
+                  <h3 className="text-base font-bold leading-tight">
+                    {renderPreviewHeading()}
                   </h3>
-                  <p className="text-[11px] md:text-xs text-muted-foreground leading-relaxed">
+                  <p className="text-[11px] text-muted-foreground">
                     {form.subheading || DEFAULT_HERO.subheading}
                   </p>
                 </div>
               </div>
-              <p className="mt-4 text-center text-[10px] text-muted-foreground uppercase tracking-tight font-medium">
-                {(!form.heading && !form.subheading) ? "Showing: Default System Content" : "Showing: Your Custom Content"}
-              </p>
             </CardContent>
           </Card>
         </div>

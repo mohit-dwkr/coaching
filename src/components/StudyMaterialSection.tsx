@@ -53,7 +53,7 @@ export default function StudyMaterialSection() {
   if (loading) return <div className="h-screen flex items-center justify-center"><Loader2 className="animate-spin text-primary" /></div>;
 
   return (
-    <section id="material" className="relative py-8 md:py-20 bg-[#F8FAFC] min-h-screen h-auto overflow-y-visible">
+    <section id="material" className="relative py-8 mt-10 md:py-20 bg-[#F8FAFC] min-h-screen h-auto overflow-y-visible">
   {/* pt-20 mobile par navbar se space dene ke liye hai */}
   <div className="container mx-auto px-4 md:px-4 pt-20 md:pt-0">
     <motion.div 

@@ -6,6 +6,7 @@ import ToppersSection from "@/components/ToppersSection";
 import GallerySection from "@/components/GallerySection";
 // import StudyMaterialSection from "@/components/StudyMaterialSection";
 import ContactSection from "@/components/ContactSection";
+import Testimonials from "@/components/Testimonials";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 
@@ -18,6 +19,7 @@ const Index = () => (
     <ToppersSection />
     <GallerySection />
     {/* <StudyMaterialSection /> */}
+    <Testimonials />
     <ContactSection />
     <Footer />
     <WhatsAppButton />

@@ -22,7 +22,7 @@ export default function HeroSection() {
     try {
       const { data, error } = await supabase
         .from("Coaching_Hero")
-        .select("*")
+        .select("*") // Isme 'highlight_word' column bhi fetch hoga
         .limit(1)
         .single();
 
@@ -36,17 +36,24 @@ export default function HeroSection() {
 
   const renderHeading = () => {
     const rawHeading = heroData?.heading || "Where Excellence Meets Ambition";
+    const highlightWord = heroData?.highlight_word || ""; // Admin panel se aane wala word
     const words = rawHeading.split(/\s+/).filter(Boolean);
 
-    return words.map((word, index) => (
-      <span key={index}>
-        <span className={index === 1 ? "text-primary" : ""}>
-          {word}
+    return words.map((word, index) => {
+      // Logic: Agar word highlightWord se match karta hai (case-insensitive)
+      const isHighlighted = word.toLowerCase().replace(/[^\w]/g, '') === highlightWord.toLowerCase().replace(/[^\w]/g, '');
+
+      return (
+        <span key={index}>
+          <span className={isHighlighted ? "text-primary" : ""}>
+            {word}
+          </span>
+          {index !== words.length - 1 && " "}
+          {/* Aap chahen to line break ka logic bhi dynamic kar sakte hain, abhi ke liye ye 2nd word ke baad hi hai */}
+          {index === 1 && <br className="hidden md:block" />}
         </span>
-        {index !== words.length - 1 && " "}
-        {index === 1 && <br className="hidden md:block" />}
-      </span>
-    ));
+      );
+    });
   };
 
   const containerVariants = {
@@ -63,22 +70,21 @@ export default function HeroSection() {
   };
 
   return (
-    <section id="home" className="relative w-full min-h-[85vh] flex items-center overflow-hidden">
-      {/* Background Image Layer */}
-      {heroData?.image_url && (
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroData.image_url}
-            alt="Classroom Background"
-            className="w-full h-full object-cover"
-          />
-          {/* Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-        </div>
-      )}
+   <section id="home" className="relative w-full h-screen min-h-[700px] flex items-center overflow-visible">
+  {/* 🔥 FIX: Condition hata di gayi hai taki fallback hamesha kaam kare */}
+  <div className="absolute inset-0 z-0">
+    <img
+      // Agar DB se image_url nahi milta, toh default "/hero.png" load hoga
+      src={heroData?.image_url || "/hero.png"} 
+      alt="Classroom Background"
+      className="w-full h-full object-cover object-[85%_center]"
+    />
+    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+  </div>
+      
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 relative z-10 py-24">
+      {/* Main Content - Responsive Alignment Fix */}
+      <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center md:items-start md:text-left">
         <AnimatePresence mode="wait">
           {!loading ? (
             <motion.div
@@ -88,52 +94,65 @@ export default function HeroSection() {
               animate="visible"
               className="max-w-3xl"
             >
-              {/* Text Side - Now White for Overlay */}
               <motion.div variants={itemVariants}>
                 <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold leading-tight text-white drop-shadow-md">
                   {renderHeading()}
                 </h1>
 
-                <p className="mt-5 text-lg text-gray-100 max-w-xl leading-relaxed drop-shadow-sm">
+                <p className="mt-5 text-lg text-gray-100 max-w-xl mx-auto md:mx-0 leading-relaxed drop-shadow-sm">
                   {heroData?.subheading ||
                     "Empowering K-12 students with expert coaching, proven results, and a clear path to academic greatness — for over 15 years."}
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-4">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-white" asChild>
-                    <a href="#contact">Join Now</a>
+                {/* Buttons: Full width on mobile, auto on desktop */}
+                <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full md:w-auto justify-center md:justify-start">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-white text-lg w-full md:w-auto py-6" asChild>
+                    <a href="#contact">Apply for Admission</a>
                   </Button>
-                  <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-md text-white border-white/20 hover:bg-white hover:text-black" asChild>
+                  <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-md text-white border-white/20 hover:bg-white hover:text-black w-full md:w-auto py-6" asChild>
                     <a href="#batches">Explore Batches</a>
                   </Button>
                 </div>
               </motion.div>
-
-              {/* Stats - Floating Bento Style */}
-              <motion.div
-                variants={itemVariants}
-                className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-5"
-              >
-                {stats.map((s) => (
-                  <div
-                    key={s.label}
-                    className="flex items-center gap-4 bg-white/80 backdrop-blur-md rounded-2xl p-5 border border-white/10 shadow-xl"
-                  >
-                    <div className="flex-shrink-0 p-3 rounded-lg bg-primary text-white">
-                      <s.icon className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-slate-900">{s.value}</div>
-                      <div className="text-sm text-slate-600 font-medium">{s.label}</div>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
             </motion.div>
           ) : (
-            <div key="loader" className="h-[60vh]" />
+            <div key="loader" className="h-[40vh]" />
           )}
         </AnimatePresence>
+      </div>
+
+      {/* Stats Section with Horizontal Scroll (Mobile) and Grid (Desktop) */}
+      <div className="absolute bottom-0 left-0 w-full translate-y-1/2 z-20">
+        <div className="container mx-auto px-0 md:px-4">
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex md:grid md:grid-cols-3 overflow-x-auto md:overflow-visible gap-4 pb-10 md:pb-0 px-4 md:px-0 no-scrollbar"
+          >
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                // 🔥 Added Hover Effect: Scale up, shadow increase, and slight lift
+                className="flex-shrink-0 w-[85vw] md:w-full flex items-center gap-4 bg-white rounded-2xl p-5 md:p-6 shadow-2xl border border-gray-100 
+                           transition-all duration-300 ease-in-out cursor-default
+                           md:hover:-translate-y-3 md:hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] group"
+              >
+                <div className="flex-shrink-0 p-3 rounded-xl bg-blue-600/10  group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                  <s.icon className="h-6 w-6 md:h-7 md:w-7" />
+                </div>
+                <div className="text-left">
+                  <div className="text-2xl md:text-3xl font-black text-gray-900 leading-none group-hover:  transition-colors duration-300">
+                    {s.value}
+                  </div>
+                  <div className="text-[10px] md:text-xs text-gray-500 font-bold uppercase mt-1 tracking-widest">
+                    {s.label}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
