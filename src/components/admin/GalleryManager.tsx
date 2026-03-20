@@ -147,7 +147,7 @@ export default function GalleryManager() {
               <label className="text-[11px] font-semibold text-slate-600 ml-1">Caption</label>
               <Input 
                 className="rounded-xl border-slate-200 text-sm h-11 md:h-10" 
-                placeholder="Student Celebration 2024..." 
+                placeholder="Student Celebration 2026..." 
                 value={form.caption} 
                 onChange={(e) => setForm({ ...form, caption: e.target.value })} 
               />
